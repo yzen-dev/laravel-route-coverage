@@ -1,0 +1,32 @@
+{
+  "name": "yzen.dev/laravel-route-coverage",
+  "version": "0.0.1",
+  "description": "Laravel route coverage",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "license": "MIT",
+  "keywords": [
+    "laravel",
+    "route",
+    "coverage"
+  ],
+  "authors": [
+    {
+      "name": "Andey Iatsenko",
+      "email": "yzen.dev@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "LaravelRouteCoverage\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^7.2 || ^8.0",
+    "illuminate/console": "^v7.0"
+  },
+  "support": {
+    "issues": "https://github.com/yzen-dev/laravel-route-coverage/issues",
+    "source": "https://github.com/yzen-dev/laravel-route-coverage"
+  }
+}
