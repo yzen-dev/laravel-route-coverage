@@ -10,6 +10,10 @@
     "route",
     "coverage"
   ],
+  "support": {
+    "issues": "https://github.com/yzen-dev/laravel-route-coverage/issues",
+    "source": "https://github.com/yzen-dev/laravel-route-coverage"
+  },
   "authors": [
     {
       "name": "Andey Iatsenko",
@@ -25,8 +29,11 @@
     "php": "^7.2 || ^8.0",
     "illuminate/console": "^v7.0"
   },
-  "support": {
-    "issues": "https://github.com/yzen-dev/laravel-route-coverage/issues",
-    "source": "https://github.com/yzen-dev/laravel-route-coverage"
+  "extra": {
+    "laravel": {
+      "providers": [
+        "LaravelOpcacheFacade\\ServiceProvider"
+      ]
+    }
   }
 }
