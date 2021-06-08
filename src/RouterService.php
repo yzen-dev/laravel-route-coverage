@@ -13,13 +13,13 @@ class RouterService
         $clearRoutes = [];
         $laravelRoutes = Route::getRoutes()->getRoutes();
         foreach ($laravelRoutes as $route) {
-            if (preg_match('/App\\\/', $route->action['uses'])) {
+            if (is_string($route->action['uses']) && preg_match('/App\\\/', $route->action['uses'])) {
                 $action = explode('@', $route->action['controller']);
                 $clearRoutes[] = [
-                    'url'=>$route->uri,
-                    'methods'=>$route->methods,
-                    'controller'=>array_shift($action),
-                    'action'=>array_shift($action),
+                    'url' => $route->uri,
+                    'methods' => $route->methods,
+                    'controller' => array_shift($action),
+                    'action' => array_shift($action),
                 ];
             }
         }
