@@ -4,6 +4,7 @@ namespace LaravelRouteCoverage\Commands;
 
 use Illuminate\Console\Command;
 use LaravelRouteCoverage\RouteCoverage;
+use LaravelRouteCoverage\Report\Html\Reporter as HtmlReporter;
 
 /**
  * Class StatusCommand
@@ -41,5 +42,6 @@ class GenerateReportCommand extends Command
             $data,
             'box-double'
         );
+        (new HtmlReporter(['app_path'=>app_path()]))->generate($parser);
     }
 }
