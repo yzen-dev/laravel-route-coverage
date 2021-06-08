@@ -8,7 +8,7 @@ class Reporter
 {
     /** @var array */
     private $config;
-    
+
     /**
      * @param array $config
      */
@@ -16,13 +16,13 @@ class Reporter
     {
         $this->config = $config;
     }
-    
-    
+
+
     public function generate(RouteCoverage $result)
     {
         $content = '<html><title>Route coverage report</title><link rel="stylesheet" href="css/style.css"><body>';
-        $content .= '<h2>Covarage ' . $result->getCoveragePercent() . '% </h2>';
-        
+        $content .= '<h2>Coverage ' . $result->getCoveragePercent() . '% </h2>';
+
         $content .= '<table>';
         $content .= '<thead><td>URL</td><td>Methods</td><td>Controller</td><td>Action</td><td>Count</td></thead>';
         $content .= '<tbody>';
@@ -34,8 +34,8 @@ class Reporter
             } else {
                 $class = 'error';
             }
-            
-            
+
+
             $content .= '<tr class="' . $class . '">';
             $content .= '<td>' . $route['url'] . ' </td>';
             $content .= '<td class="methods">' . implode(', ', $route['methods']) . ' </td>';
@@ -45,9 +45,9 @@ class Reporter
             $content .= '</tr>';
         }
         $content .= '</tbody></table>';
-        
+
         $content .= '</body></html>';
-        
+
         if (!file_exists($this->config['app_path'] . '/../public/route-coverage')) {
             mkdir($this->config['app_path'] . '/../public/route-coverage', 0755);
         }
@@ -55,7 +55,7 @@ class Reporter
             mkdir($this->config['app_path'] . '/../public/route-coverage/css', 0755);
         }
         copy(__DIR__ . '/../../../template/html/style.css', $this->config['app_path'] . '/../public/route-coverage/css/style.css');
-        
+
         $myFile = $this->config['app_path'] . '/../public/route-coverage/report.html';
         $fh = fopen($myFile, 'w');
         fwrite($fh, $content);
