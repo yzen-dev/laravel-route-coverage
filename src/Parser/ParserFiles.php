@@ -7,31 +7,31 @@ namespace LaravelRouteCoverage\Parser;
 class ParserFiles
 {
     private const REGEX_MAP = [
-        ['regex' => '/json\([\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/call\([\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        
-        ['regex' => '/(get)\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/(get)Json\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        
-        ['regex' => '/(post)\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/(post)Json\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        
-        ['regex' => '/(put)\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/(put)Json\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        
-        ['regex' => '/(patch)\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/(patch)Json\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        
-        ['regex' => '/(delete)\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/(delete)Json\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        
-        ['regex' => '/(options)\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/(options)Json\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        
-        ['regex' => '/(get)\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
-        ['regex' => '/(get)Json\([\n\s]*\'([\da-zA-Z\/]*)\'/m'],
+        ['regex' => '/json\([\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/call\([\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+
+        ['regex' => '/(get)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/(get)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+
+        ['regex' => '/(post)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/(post)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+
+        ['regex' => '/(put)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/(put)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+
+        ['regex' => '/(patch)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/(patch)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+
+        ['regex' => '/(delete)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/(delete)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+
+        ['regex' => '/(options)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/(options)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+
+        ['regex' => '/(get)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+        ['regex' => '/(get)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
     ];
-    
+
     /**
      * RouteCoverage constructor.
      *
@@ -41,7 +41,7 @@ class ParserFiles
     {
         $this->config = $config;
     }
-    
+
     public function getAllPaths($dir): array
     {
         $items = scandir($dir);
@@ -60,7 +60,7 @@ class ParserFiles
         }
         return $files;
     }
-    
+
     public function parse()
     {
         $dir = $this->config['app_path'] . '/../tests';
@@ -70,7 +70,7 @@ class ParserFiles
         $testedRoutes = [];
         foreach ($files as $file) {
             $content = file_get_contents($file);
-            
+
             foreach (self::REGEX_MAP as $regex) {
                 preg_match_all($regex['regex'], $content, $matches, PREG_SET_ORDER);
                 foreach ($matches as $match) {
@@ -81,8 +81,8 @@ class ParserFiles
                 }
             }
         }
-        
+
         return $testedRoutes;
     }
-    
+
 }
