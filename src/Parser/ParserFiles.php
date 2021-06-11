@@ -27,9 +27,6 @@ class ParserFiles
 
         ['regex' => '/(options)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
         ['regex' => '/(options)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-
-        ['regex' => '/(get)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/(get)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
     ];
 
     /**
