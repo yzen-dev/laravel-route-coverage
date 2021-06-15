@@ -6,27 +6,9 @@ namespace LaravelRouteCoverage\Parser;
 
 class ParserFiles
 {
-    private const REGEX_MAP = [
-        ['regex' => '/json\([\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/call\([\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-
-        ['regex' => '/(get)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/(get)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-
-        ['regex' => '/(post)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/(post)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-
-        ['regex' => '/(put)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/(put)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-
-        ['regex' => '/(patch)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/(patch)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-
-        ['regex' => '/(delete)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/(delete)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-
-        ['regex' => '/(options)\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
-        ['regex' => '/(options)Json\([\n\s]*\'([\da-zA-Z\/\-]*)\'/m'],
+    private const REGEX = [
+        '/->(json|call)\((.*?)\)/m',
+        '/->(get|getJson|post|postJson|put|putJson|patch|patchJson|delete|deleteJson|options|optionsJson)\((.*?)\)/m',
     ];
 
     /**
@@ -65,20 +47,42 @@ class ParserFiles
             $files = $this->getAllPaths($dir);
         }
         $testedRoutes = [];
+        ///var/www/app/../tests/E2E/Admin/AgentController/IndexTest.php
         foreach ($files as $file) {
             $content = file_get_contents($file);
 
-            foreach (self::REGEX_MAP as $regex) {
-                preg_match_all($regex['regex'], $content, $matches, PREG_SET_ORDER);
+            foreach (self::REGEX as $regex) {
+                preg_match_all($regex, $content, $matches, PREG_SET_ORDER);
+                if (empty($matches)) continue;
+
                 foreach ($matches as $match) {
+                    if ($match[1] === 'json') {
+                        preg_match('/[\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'(.*)/m', $match[2], $action);
+                        $method = $action[1];
+                        preg_match('/.*?,(.*)/m', $action[2],$checkHeader);
+                        if (!empty($checkHeader)){
+                            preg_match('/(.*?)\'[\n\s]*,/m', $action[2], $route);
+                            $route = $route[1];
+                        } else {
+                            $route = $action[2];
+                        }
+                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$n}', $route);
+                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$n}', $route);
+                        $route = preg_replace('/([\'"])/', '', $route);
+                    } else {
+                        preg_match('/[\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'(.*)\)/m', $match[0], $action);
+                        $method = $action[1];
+                        $route = $action[2];
+                    }
+                    $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$val}', $route);
+                    $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
                     $testedRoutes[] = [
-                        'url' => ltrim($match[2],'/'),
-                        'method' => strtoupper($match[1]),
+                        'url' => ltrim($route, '/'),
+                        'method' => strtoupper($method),
                     ];
                 }
             }
         }
-
         return $testedRoutes;
     }
 

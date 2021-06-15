@@ -64,7 +64,8 @@ class RouteCoverage
             $statRoute = $route;
             $statRoute['count'] = 0;
             foreach ($testedRoutes as $testedRoute) {
-                if ($testedRoute['url'] === $route['url'] && in_array($testedRoute['method'], $route['methods'])) {
+                $formattedRoute = preg_replace('/{(.*?)}/', '{$val}', $route['url']);
+                if ($testedRoute['url'] === $formattedRoute && in_array($testedRoute['method'], $route['methods'])) {
                     $statRoute['count']++;
                 }
             }
