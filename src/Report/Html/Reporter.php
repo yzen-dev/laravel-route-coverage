@@ -22,6 +22,8 @@ class Reporter
     {
         $content = '<html><title>Route coverage report</title><link rel="stylesheet" href="css/style.css"><body>';
         $content .= '<h2>Coverage ' . $result->getCoveragePercent() . '% </h2>';
+        $content .= '<h4>All routes ' . count($result->getRouteStatistic() ). ' </h4>';
+        $content .= '<h4>Tested routes ' . count($result->getTestedRouteStatistic()). ' </h4>';
 
         $content .= '<table>';
         $content .= '<thead><td>URL</td><td>Methods</td><td>Controller</td><td>Action</td><td>Count</td></thead>';

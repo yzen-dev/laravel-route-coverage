@@ -64,7 +64,8 @@ class RouteCoverage
             $statRoute = $route;
             $statRoute['count'] = 0;
             foreach ($testedRoutes as $testedRoute) {
-                if ($testedRoute['url'] === $route['url'] && in_array($testedRoute['method'], $route['methods'])) {
+                $formattedRoute = preg_replace('/{(.*?)}/', '{$val}', $route['url']);
+                if ($testedRoute['url'] === $formattedRoute && in_array($testedRoute['method'], $route['methods'])) {
                     $statRoute['count']++;
                 }
             }
@@ -90,17 +91,21 @@ class RouteCoverage
         return $this->statistic['routes'];
     }
 
-    public function getCoveragePercent()
+    public function getTestedRouteStatistic(): array
     {
-        $countRoute = count($this->statistic['routes']);
-        $percent = 0;
-        $testedRoutes = array_filter(
+        return array_filter(
             $this->statistic['routes'],
             function ($item) {
                 return $item['count'] > 0;
             }
         );
-        $countTestedRoutes = count($testedRoutes);
+
+    }
+
+    public function getCoveragePercent()
+    {
+        $countRoute = count($this->statistic['routes']);
+        $countTestedRoutes = count($this->getTestedRouteStatistic());
 
         return round($countTestedRoutes / $countRoute * 100, 2);
     }
