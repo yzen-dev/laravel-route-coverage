@@ -47,7 +47,7 @@ class ParserFiles
             $files = $this->getAllPaths($dir);
         }
         $testedRoutes = [];
-        ///var/www/app/../tests/E2E/Admin/AgentController/IndexTest.php
+
         foreach ($files as $file) {
             $content = file_get_contents($file);
 
