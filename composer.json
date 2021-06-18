@@ -27,7 +27,7 @@
   },
   "require": {
     "php": "^7.2 || ^8.0",
-    "illuminate/console": "^v8.0"
+    "illuminate/console": "^7.2 || ^v8.0"
   },
   "extra": {
     "laravel": {
