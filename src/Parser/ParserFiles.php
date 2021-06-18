@@ -56,29 +56,33 @@ class ParserFiles
                 if (empty($matches)) continue;
 
                 foreach ($matches as $match) {
-                    if ($match[1] === 'json') {
-                        preg_match('/[\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'(.*)/m', $match[2], $action);
-                        $method = $action[1];
-                        preg_match('/.*?,(.*)/m', $action[2],$checkHeader);
-                        if (!empty($checkHeader)){
-                            preg_match('/(.*?)\'[\n\s]*,/m', $action[2], $route);
-                            $route = $route[1];
+                    try {
+                        if ($match[1] === 'json') {
+                            preg_match('/[\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'(.*)/m', $match[2], $action);
+                            $method = $action[1];
+                            preg_match('/.*?,(.*)/m', $action[2],$checkHeader);
+                            if (!empty($checkHeader)){
+                                preg_match('/(.*?)\'[\n\s]*,/m', $action[2], $route);
+                                $route = $route[1];
+                            } else {
+                                $route = $action[2];
+                            }
+
                         } else {
+                            preg_match('/([a-zA-Z]*)\((.*?)(,|\))/m', $match[0], $action);
+                            $method = preg_replace('/json/i', '', $action[1]);
                             $route = $action[2];
                         }
-
-                    } else {
-                        preg_match('/[\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'(.*)\)/m', $match[0], $action);
-                        $method = $action[1];
-                        $route = $action[2];
+                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$val}', $route);
+                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
+                        $route = preg_replace('/([\'"])/', '', $route);
+                        $testedRoutes[] = [
+                            'url' => ltrim($route, '/'),
+                            'method' => strtoupper($method),
+                        ];
+                    } catch (\Throwable $exception){
+                        echo 'error: ' . json_encode($match) . PHP_EOL;
                     }
-                    $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$val}', $route);
-                    $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
-                    $route = preg_replace('/([\'"])/', '', $route);
-                    $testedRoutes[] = [
-                        'url' => ltrim($route, '/'),
-                        'method' => strtoupper($method),
-                    ];
                 }
             }
         }
