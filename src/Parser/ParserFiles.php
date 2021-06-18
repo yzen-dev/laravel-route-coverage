@@ -66,9 +66,7 @@ class ParserFiles
                         } else {
                             $route = $action[2];
                         }
-                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$n}', $route);
-                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$n}', $route);
-                        $route = preg_replace('/([\'"])/', '', $route);
+
                     } else {
                         preg_match('/[\n\s]*\'([a-zA-Z]*)\'[\n\s]*,[\n\s]*\'(.*)\)/m', $match[0], $action);
                         $method = $action[1];
@@ -76,6 +74,7 @@ class ParserFiles
                     }
                     $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$val}', $route);
                     $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
+                    $route = preg_replace('/([\'"])/', '', $route);
                     $testedRoutes[] = [
                         'url' => ltrim($route, '/'),
                         'method' => strtoupper($method),

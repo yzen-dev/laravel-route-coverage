@@ -18,5 +18,21 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
                 Commands\GenerateReportCommand::class,
             ]);
         }
+
+        $this->publishes(
+            [
+                __DIR__ . '/config/route-coverage.php' => config_path('route-coverage.php'),
+            ],
+            'config'
+        );
+    }
+
+    /**
+     * Register bindings in the container.
+     * @return void
+     */
+    public function register(): void
+    {
+        $this->mergeConfigFrom(__DIR__ . '/config/route-coverage.php', 'route-coverage');
     }
 }

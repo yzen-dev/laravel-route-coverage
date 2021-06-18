@@ -46,7 +46,7 @@ class GenerateReportCommand extends Command
         (new HtmlReporter(['app_path' => app_path()]))->generate($parser);
         (new JUnitReporter(['app_path' => app_path()]))->generate($parser);
 
-        if ($parser->getCoveragePercent() < 85) {
+        if ($parser->getCoveragePercent() < app()['config']['route-coverage']['percent_approval']) {
             exit(1);
         }
         exit(0);
