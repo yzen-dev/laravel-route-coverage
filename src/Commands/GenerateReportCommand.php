@@ -25,6 +25,8 @@ class GenerateReportCommand extends Command
     {
         $parser = new RouteCoverage(['app_path' => base_path('app')]);
         $parser->generate();
+        $this->info('All routes ' . count($parser->getRouteStatistic()));
+        $this->info('Tested routes ' . count($parser->getTestedRouteStatistic()));
         $this->warn('Covarage ' . $parser->getCoveragePercent() . '%');
         $prepareRowTable = static function ($route) {
             return [
