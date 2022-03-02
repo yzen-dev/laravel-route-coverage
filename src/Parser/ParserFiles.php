@@ -77,6 +77,7 @@ class ParserFiles
                         $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$val}', $route);
                         $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
                         $route = preg_replace('/([\'"])/', '', $route);
+                        $route = preg_replace('/\?(.*)/', '', $route);
 
                         $url = ltrim($route, '/');
                         $url = trim(preg_replace('/\s+/', ' ', $url));
