@@ -4,56 +4,91 @@ declare(strict_types=1);
 
 namespace LaravelRouteCoverage\Parser;
 
+/**
+ *
+ */
 class ParserFiles
 {
+    /** @const array */
     private const REGEX = [
         '/->(json|call)\(([\s\S]*?)\)/m',
         '/->(get|getJson|post|postJson|put|putJson|patch|patchJson|delete|deleteJson|options|optionsJson)\(([\s\S]*?)\)/m',
     ];
 
     /**
+     * @var string
+     */
+    private string $testPath;
+
+    /**
      * RouteCoverage constructor.
      *
-     * @param array $statistic
+     * @param string $testPath
      */
-    public function __construct(array $config)
+    public function __construct(string $testPath)
     {
-        $this->config = $config;
+        $this->testPath = $testPath;
     }
 
-    public function getAllPaths($dir): array
+    /**
+     * Get all files in directory
+     *
+     * @param string $dir
+     *
+     * @return null|array<string>
+     */
+    public function getAllPaths(string $dir): ?array
     {
+        if (!is_dir($dir)) {
+            return null;
+        }
+
         $items = scandir($dir);
+
+        if (!$items) {
+            return null;
+        }
+
         $files = [];
         $scannedItem = array_diff($items, ['..', '.']);
         foreach ($scannedItem as $item) {
-            if (in_array($item, ['.', '..'])) {
-                continue;
-            }
             $path = $dir . DIRECTORY_SEPARATOR . $item;
-            if (is_dir($path)) {
-                $files = array_merge($files, $this->getAllPaths($path));
-                continue;
+            if (!is_dir($path)) {
+                $files[] = $path;
             }
-            $files[] = $path;
+            $scanFiles = $this->getAllPaths($path);
+            if ($scanFiles !== null) {
+                $files = array_merge($files, $scanFiles);
+            }
         }
         return $files;
     }
 
-    public function parse()
+    /**
+     * Get all test-files
+     *
+     * @return null|array<int,array>
+     */
+    public function parse(): ?array
     {
-        $dir = $this->config['app_path'] . '/../tests';
-        if (is_dir($dir)) {
-            $files = $this->getAllPaths($dir);
+        $files = $this->getAllPaths($this->testPath);
+        if ($files === null) {
+            return null;
         }
+
         $testedRoutes = [];
 
         foreach ($files as $file) {
             $content = file_get_contents($file);
+            if (!$content) {
+                continue;
+            }
 
             foreach (self::REGEX as $regex) {
                 preg_match_all($regex, $content, $matches, PREG_SET_ORDER);
-                if (empty($matches)) continue;
+                if (empty($matches)) {
+                    continue;
+                }
 
                 foreach ($matches as $match) {
                     try {
@@ -67,7 +102,6 @@ class ParserFiles
                             } else {
                                 $route = $action[2];
                             }
-
                         } else {
                             preg_match('/([a-zA-Z]*)\(([\s\S]*?)(,|\))/m', $match[0], $action);
                             $method = preg_replace('/json/i', '', $action[1]);
@@ -78,12 +112,16 @@ class ParserFiles
                         $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
                         $route = preg_replace('/([\'"])/', '', $route);
                         $route = preg_replace('/\?(.*)/', '', $route);
-
-                        $url = ltrim($route, '/');
-                        $url = trim(preg_replace('/\s+/', ' ', $url));
+                        if (is_string($route)) {
+                            $url = ltrim($route, '/');
+                            $url = trim(preg_replace('/\s+/', ' ', $url));
+                        } else {
+                            continue;
+                        }
                         $testedRoutes[] = [
                             'url' => $url,
                             'method' => strtoupper($method),
+                            'file' => realpath($file),
                         ];
                     } catch (\Throwable $exception) {
                         echo 'error: ' . json_encode($match) . PHP_EOL;
@@ -93,5 +131,4 @@ class ParserFiles
         }
         return $testedRoutes;
     }
-
 }

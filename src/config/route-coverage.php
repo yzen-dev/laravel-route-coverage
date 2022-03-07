@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'percent_approval' => 80,
+    'test_path' => dirname(__DIR__) . '/tests',
+    'percent_approval' => 25,
 ];

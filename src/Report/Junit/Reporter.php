@@ -2,36 +2,34 @@
 
 namespace LaravelRouteCoverage\Report\Junit;
 
-use LaravelRouteCoverage\RouteCoverage;
+use LaravelRouteCoverage\Report\AbstractReport;
+use LaravelRouteCoverage\RouteCollection;
 
-class Reporter
+/**
+ *
+ */
+class Reporter extends AbstractReport
 {
-    /** @var array */
-    private $config;
-
     /**
-     * @param array $config
+     * @param RouteCollection $routeCollection
+     *
+     * @return void
+     * @throws \Exception
      */
-    public function __construct(array $config)
-    {
-        $this->config = $config;
-    }
-
-
-    public function generate(RouteCoverage $result)
+    public function generate(RouteCollection $routeCollection)
     {
         $noTest = array_filter(
-            $result->getRouteStatistic(),
+            $routeCollection->get(),
             static function ($item) {
                 return $item['count'] === 0;
             }
         );
         $content = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $content .= '<testsuites name="LaravelRouteCoverage" errors="0" failures="' . count($noTest) . '" tests="' . count(
-                $result->getRouteStatistic()
-            ) . '">' . PHP_EOL;
+            $routeCollection->get()
+        ) . '">' . PHP_EOL;
 
-        foreach ($result->getRouteStatistic() as $route) {
+        foreach ($routeCollection->get() as $route) {
             $content .= '<testsuite name="/builds/tag/assist24/app/Helpers/Helper.php" errors="0" tests="7" failures="7">' . PHP_EOL;
             $content .=
                 '<testcase name="' . $route['url'] . '" file="' . $route['controller'] . '@' . $route['action'] . '">
@@ -41,12 +39,7 @@ class Reporter
         }
 
         $content .= '</testsuites>';
-        if (!file_exists($this->config['app_path'] . '/../public/route-coverage')) {
-            mkdir($this->config['app_path'] . '/../public/route-coverage', 0755);
-        }
-        $myFile = $this->config['app_path'] . '/../public/route-coverage/junit.xml';
-        $fh = fopen($myFile, 'w');
-        fwrite($fh, $content);
-        fclose($fh);
+
+        $this->saveFile('junit.xml', $content);
     }
 }

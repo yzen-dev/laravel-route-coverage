@@ -4,6 +4,7 @@ namespace LaravelRouteCoverage;
 
 /**
  * Class ServiceProvider
+ *
  * @package LaravelRouteCoverage
  */
 class ServiceProvider extends \Illuminate\Support\ServiceProvider
@@ -11,7 +12,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -21,7 +22,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->publishes(
             [
-                __DIR__ . '/config/route-coverage.php' => config_path('route-coverage.php'),
+                __DIR__ . '/config/route-coverage.php' => $this->app->configPath('route-coverage.php'),
             ],
             'config'
         );
@@ -29,6 +30,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
     /**
      * Register bindings in the container.
+     *
      * @return void
      */
     public function register(): void

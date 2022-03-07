@@ -1,4 +1,7 @@
 # LaravelRouteCoverage
+![Packagist Version](https://img.shields.io/packagist/v/yzen.dev/laravel-route-coverage?color=%23007ec6&style=plastic)
+![Packagist Downloads](https://img.shields.io/packagist/dm/yzen.dev/laravel-route-coverage)
+![Packagist Downloads](https://img.shields.io/packagist/dt/yzen.dev/laravel-route-coverage)
 
 Laravel route coverage report.
 
@@ -27,22 +30,3 @@ Also the html report will be saved in the public/route-coverage directory:
 
 ![image](https://user-images.githubusercontent.com/24630195/122606142-2250a080-d081-11eb-9950-0ed795d9c7b8.png)
 
-
-The parser parses most requests, for example, such constructions will definitely be recognized
-
-```php
-$this->json('GET', '/api/v1/agents/' . $agent->id . '/auth/token');
-$this->json('POST', '/api/v1/bids', [], ['Authorisation' => 'bearer ' . $response['data']['token']]);
-$this->json('POST', '/api/v1/agents')->assertForbidden();
-$this->json('PUT', '/api/v1/agents/' . $agent->id . '/users/' . $subUser->id . '/blocked')
-$this->post('/api/v1/agents')->assertForbidden();
-$this->postJson('/api/v1/agents')->assertForbidden();
-$this->get('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-$this->getJson('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-$this->put('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-$this->putJson('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-$this->patch('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-$this->patchJson('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-$this->delete('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-$this->deleteJson('/api/v1/agents/' . $agent->id . '/auth/token')->assertForbidden();
-```
