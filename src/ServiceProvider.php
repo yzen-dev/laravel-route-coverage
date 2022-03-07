@@ -21,7 +21,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
 
         $this->publishes(
             [
-                __DIR__ . '/config/route-coverage.php' => config_path('route-coverage.php'),
+                __DIR__ . '/config/route-coverage.php' => $this->app->configPath('route-coverage.php'),
             ],
             'config'
         );

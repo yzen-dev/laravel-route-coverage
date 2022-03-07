@@ -4,60 +4,35 @@ declare(strict_types=1);
 
 namespace LaravelRouteCoverage;
 
+use Illuminate\Config\Repository as Config;
 use LaravelRouteCoverage\Parser\ParserFiles;
 
 class RouteCoverage
 {
     private $statistic = [];
-
-    private $config = [];
+    private ParserFiles $parser;
+    private RouteCollection $collection;
+    private RouterService $router;
 
     /**
      * RouteCoverage constructor.
      *
      * @param array $statistic
      */
-    public function __construct(array $config)
+    public function __construct(RouterService $routerService, Config $config)
     {
-        $this->config = $config;
+        $this->parser = new ParserFiles($config->get('route-coverage.test_path'));
+        $this->router = $routerService;
     }
 
-    public function generate()
+    public function generate(): RouteCollection
     {
-        $parser = new ParserFiles($this->config);
-        $testedRoutes = $parser->parse();
-
-        $routes = RouterService::getAllUri();
-
-        $this->prepareStatistic($testedRoutes, $routes);
-
+        $testedRoutes = $this->parser->parse();
+        $routes = $this->combineData($testedRoutes, $this->router->getRoutes());
+        return new RouteCollection($routes);
     }
 
-    private function prepareStatistic($testedRoutes, $routes)
-    {
-        $statistic = [
-            'routes' => [],
-        ];
-
-        $statistic['routes'] = $this->countNumberTests($testedRoutes, $routes);
-        $this->sortByCountNumberTests($statistic['routes']);
-
-        $this->statistic = $statistic;
-    }
-
-    private function sortByCountNumberTests(&$testedRoutes)
-    {
-        return usort(
-            $testedRoutes, function ($a, $b) {
-            if ($a['count'] === $b['count']) {
-                return 0;
-            }
-            return ($a['count'] > $b['count']) ? -1 : 1;
-        }
-        );
-    }
-
-    private function countNumberTests($testedRoutes, $routes)
+    private function combineData($testedRoutes, $routes)
     {
         $result = [];
         foreach ($routes as $route) {
@@ -66,47 +41,13 @@ class RouteCoverage
             foreach ($testedRoutes as $testedRoute) {
                 $formattedRoute = preg_replace('/{(.*?)}/', '{$val}', $route['url']);
                 if ($testedRoute['url'] === $formattedRoute && in_array($testedRoute['method'], $route['methods'])) {
+                    $statRoute['files'] [] = $testedRoute['file'];
                     $statRoute['count']++;
                 }
             }
             $result[] = $statRoute;
         }
+
         return $result;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getStatistic(): array
-    {
-        return $this->statistic;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRouteStatistic(): array
-    {
-        return $this->statistic['routes'];
-    }
-
-    public function getTestedRouteStatistic(): array
-    {
-        return array_filter(
-            $this->statistic['routes'],
-            function ($item) {
-                return $item['count'] > 0;
-            }
-        );
-
-    }
-
-    public function getCoveragePercent()
-    {
-        $countRoute = count($this->statistic['routes']);
-        $countTestedRoutes = count($this->getTestedRouteStatistic());
-
-        return round($countTestedRoutes / $countRoute * 100, 2);
     }
 }

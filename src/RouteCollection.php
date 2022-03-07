@@ -1,0 +1,125 @@
+<?php
+
+declare(strict_types=1);
+
+namespace LaravelRouteCoverage;
+
+use LaravelRouteCoverage\Parser\ParserFiles;
+
+class RouteCollection
+{
+    /**
+     * The items contained in the collection.
+     *
+     * @var array
+     */
+    protected $items = [];
+
+    /**
+     * Create a new collection.
+     *
+     * @param array $items
+     *
+     * @return void
+     */
+    public function __construct(array $items = [])
+    {
+        $this->items = $items;
+    }
+
+    public function sortRotesByTests()
+    {
+        $routes = $this->items;
+        usort(
+            $routes, function ($a, $b) {
+            if ($a['count'] === $b['count']) {
+                return 0;
+            }
+            return ($a['count'] > $b['count']) ? -1 : 1;
+        }
+        );
+        return new self($routes);
+    }
+
+    public function sortControllerByTests()
+    {
+        $controllers = $this->items;
+        usort($controllers, function ($a, $b) {
+            if ($a['testedActions'] === $b['testedActions']) {
+                return 0;
+            }
+            return ($a['testedActions'] > $b['testedActions']) ? -1 : 1;
+        });
+        return new self($controllers);
+    }
+
+    /**
+     * @return array
+     */
+    public function get(): array
+    {
+        return $this->items;
+    }
+
+
+    public function getTestedRouteStatistic(): self
+    {
+        return new static(
+            array_filter(
+                $this->items,
+                function ($item) {
+                    return $item['count'] > 0;
+                }
+            )
+        );
+    }
+
+    /**
+     * Get coverage percent
+     *
+     * @return float
+     */
+    public function getCoveragePercent()
+    {
+        $countRoute = $this->count();
+        $countTestedRoutes = $this->getTestedRouteStatistic()->count();
+
+        return round($countTestedRoutes / $countRoute * 100, 2);
+    }
+
+    /**
+     * Count the number of items in the collection.
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->items);
+    }
+
+    public function groupByController(): self
+    {
+        $controllers = [];
+        foreach ($this->get() as $item) {
+            if (!isset($controllers [$item['controller']])) {
+                $controllers [$item['controller']] = [
+                    'controller' => $item['controller'],
+                    'namespace' => $item['namespace'],
+                    'countActions' => 1,
+                    'testedActions' => $item['count'] > 0 ? 1 : 0,
+                    'actions' => [$item['action'] => $item],
+                ];
+                continue;
+            }
+            if (!isset($controllers[$item['controller']]['actions'][$item['action']])) {
+                $controllers[$item['controller']]['actions'][$item['action']] = $item;
+                $controllers[$item['controller']]['countActions']++;
+                if ($item['count']) {
+                    $controllers[$item['controller']]['testedActions']++;
+                }
+                continue;
+            }
+        }
+        return new self($controllers);
+    }
+}

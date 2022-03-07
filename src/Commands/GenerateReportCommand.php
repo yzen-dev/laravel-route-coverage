@@ -4,6 +4,8 @@ namespace LaravelRouteCoverage\Commands;
 
 use Illuminate\Console\Command;
 use LaravelRouteCoverage\RouteCoverage;
+use LaravelRouteCoverage\RouterService;
+use LaravelRouteCoverage\RouteCollection;
 use LaravelRouteCoverage\Report\Html\Reporter as HtmlReporter;
 use LaravelRouteCoverage\Report\Junit\Reporter as JUnitReporter;
 
@@ -15,19 +17,57 @@ use LaravelRouteCoverage\Report\Junit\Reporter as JUnitReporter;
 class GenerateReportCommand extends Command
 {
     /** @var string The console command name. */
-    protected $signature = 'route:coverage';
+    protected $signature = 'route:coverage {--html} {--junit} {--group-by-controller}';
 
     /** @var string The console command description. */
     protected $description = 'Generate endpoints coverage report ';
 
+    private RouterService $routerService;
+    private RouteCoverage $routeCoverage;
+    private RouteCollection $routeCollection;
+
+    public function __construct(RouterService $router, RouteCoverage $routerService)
+    {
+        parent::__construct();
+        $this->routerService = $router;
+        $this->routeCoverage = $routerService;
+    }
+
     /** @return mixed Execute the console command. */
     public function handle()
     {
-        $parser = new RouteCoverage(['app_path' => base_path('app')]);
-        $parser->generate();
-        $this->info('All routes ' . count($parser->getRouteStatistic()));
-        $this->info('Tested routes ' . count($parser->getTestedRouteStatistic()));
-        $this->warn('Covarage ' . $parser->getCoveragePercent() . '%');
+        if (empty($routes = $this->routerService->getRoutes())) {
+            return $this->error("Your application doesn't have any routes matching the given criteria.");
+        }
+        $this->routeCollection = $this->routeCoverage->generate();
+
+        $this->info('All routes ' . $this->routeCollection->count());
+        $this->info('Tested routes ' . $this->routeCollection->getTestedRouteStatistic()->count());
+        $this->warn('Coverage ' . $this->routeCollection->getCoveragePercent() . '%');
+
+        if ($this->option('group-by-controller')) {
+            $this->printControllers();
+        } else {
+            $this->printEndpoints();
+        }
+        if ($this->option('html')) {
+            (new HtmlReporter(['app_path' => app_path()]))->generate($this->routeCollection);
+        }
+        if ($this->option('json')) {
+            (new JSONReporter(['app_path' => app_path()]))->generate($this->routeCollection);
+        }
+        if ($this->option('junit')) {
+            (new JUnitReporter(['app_path' => app_path()]))->generate($this->routeCollection);
+        }
+
+        if ($this->routeCollection->getCoveragePercent() < app()['config']['route-coverage']['percent_approval']) {
+            exit(1);
+        }
+        exit(0);
+    }
+
+    private function printEndpoints()
+    {
         $prepareRowTable = static function ($route) {
             return [
                 'url' => $route['url'],
@@ -37,7 +77,7 @@ class GenerateReportCommand extends Command
                 'count' => $route['count'],
             ];
         };
-        $data = array_map($prepareRowTable, $parser->getRouteStatistic());
+        $data = array_map($prepareRowTable, $this->parser->getRouteStatistic());
 
         $header = ['Route', 'Methods', 'Controller', 'Action', 'Count'];
         $this->table(
@@ -45,12 +85,25 @@ class GenerateReportCommand extends Command
             $data,
             'box-double'
         );
-        (new HtmlReporter(['app_path' => app_path()]))->generate($parser);
-        (new JUnitReporter(['app_path' => app_path()]))->generate($parser);
+    }
 
-        if ($parser->getCoveragePercent() < app()['config']['route-coverage']['percent_approval']) {
-            exit(1);
-        }
-        exit(0);
+    private function printControllers()
+    {
+        $prepareRowTable = static function ($route) {
+            return [
+                'controller' => $route['controller'],
+                'actions' => $route['testedActions'] . ' / ' . $route['countActions'],
+                'coverage' => round($route['testedActions'] / $route['countActions'] * 100, 2)
+            ];
+        };
+
+        $data = array_map($prepareRowTable, $this->routeCollection->groupByController()->get());
+
+        $header = ['Controller', 'Tested', 'Coverage'];
+        $this->table(
+            $header,
+            $data,
+            'box-double'
+        );
     }
 }

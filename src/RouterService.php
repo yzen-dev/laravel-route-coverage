@@ -4,25 +4,47 @@ declare(strict_types=1);
 
 namespace LaravelRouteCoverage;
 
-use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Route;
+use Illuminate\Routing\Router;
 
 class RouterService
 {
-    public static function getAllUri()
+    /**
+     * The router instance.
+     *
+     * @var \Illuminate\Routing\Router
+     */
+    protected $router;
+
+    /**
+     * Create a new route command instance.
+     *
+     * @param \Illuminate\Routing\Router $router
+     *
+     * @return void
+     */
+    public function __construct(Router $router)
     {
-        $clearRoutes = [];
-        $laravelRoutes = Route::getRoutes()->getRoutes();
-        foreach ($laravelRoutes as $route) {
-            if (is_string($route->action['uses']) && preg_match('/App\\\/', $route->action['uses'])) {
-                $action = explode('@', $route->action['controller']);
-                $clearRoutes[] = [
+        $this->router = $router;
+
+        $this->router->flushMiddlewareGroups();
+    }
+
+    public function getRoutes()
+    {
+
+        return collect($this->router->getRoutes())
+            ->filter(fn ($route) => is_string($route->action['uses']) && preg_match('/App\\\/', $route->action['uses']))
+            ->map(function ($route) {
+                preg_match('/(.*)\\\\(.*)@/m', $route->action['controller'], $controller);
+                return [
                     'url' => $route->uri,
                     'methods' => $route->methods,
-                    'controller' => array_shift($action),
-                    'action' => array_shift($action),
+                    'namespace' => $controller[1],
+                    'controller' => $controller[2],
+                    'action' => $route->getActionMethod(),
+                    'fullAction' => $route->getActionName(),
                 ];
-            }
-        }
-        return $clearRoutes;
+            });
     }
 }

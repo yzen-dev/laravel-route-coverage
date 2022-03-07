@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="" tests="3" assertions="2" errors="1" warnings="0" failures="0" skipped="0" time="0.010676">
+    <testsuite name="Unit" tests="3" assertions="2" errors="1" warnings="0" failures="0" skipped="0" time="0.010676">
+      <testsuite name="Tests\ParserDirectoryTest" file="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/tests/ParserDirectoryTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.003206">
+        <testcase name="testParserTestDir" class="Tests\ParserDirectoryTest" classname="Tests.ParserDirectoryTest" file="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/tests/ParserDirectoryTest.php" line="29" assertions="1" time="0.003206"/>
+      </testsuite>
+      <testsuite name="Tests\RouterCoverageTest" file="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/tests/RouterCoverageTest.php" tests="1" assertions="0" errors="1" warnings="0" failures="0" skipped="0" time="0.007202">
+        <testcase name="testDirNotFound" class="Tests\RouterCoverageTest" classname="Tests.RouterCoverageTest" file="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/tests/RouterCoverageTest.php" line="31" assertions="0" time="0.007202">
+          <error type="PHPUnit\Framework\RiskyTestError">Tests\RouterCoverageTest::testDirNotFound
+This test did not perform any assertions
+
+/Users/yzen.dev/Projects/opensource/laravel-route-coverage/tests/RouterCoverageTest.php:31</error>
+        </testcase>
+      </testsuite>
+      <testsuite name="Tests\RouterServiceTest" file="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/tests/RouterServiceTest.php" tests="1" assertions="1" errors="0" warnings="0" failures="0" skipped="0" time="0.000267">
+        <testcase name="testGetProjectRoutes" class="Tests\RouterServiceTest" classname="Tests.RouterServiceTest" file="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/tests/RouterServiceTest.php" line="30" assertions="1" time="0.000267"/>
+      </testsuite>
+    </testsuite>
+  </testsuite>
+</testsuites>
