@@ -34,9 +34,9 @@ class RouterService
     }
 
     /**
-     * @return Collection
+     * @return array<mixed>
      */
-    public function getRoutes(): Collection
+    public function getRoutes(): array
     {
 
         return collect($this->router->getRoutes())
@@ -51,6 +51,7 @@ class RouterService
                     'action' => $route->getActionMethod(),
                     'fullAction' => $route->getActionName(),
                 ];
-            });
+            })
+            ->toArray();
     }
 }

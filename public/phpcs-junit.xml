@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="PHP_CodeSniffer 3.6.2" errors="0" tests="10" failures="0">
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/RouteCoverage.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/RouteCoverage.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/config/route-coverage.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/config/route-coverage.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Parser/ParserFiles.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Parser/ParserFiles.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/RouteCollection.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/RouteCollection.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Report/AbstractReport.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Report/AbstractReport.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Report/Junit/Reporter.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Report/Junit/Reporter.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Report/Html/Reporter.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Report/Html/Reporter.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Commands/GenerateReportCommand.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/Commands/GenerateReportCommand.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/ServiceProvider.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/ServiceProvider.php"/>
+</testsuite>
+<testsuite name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/RouterService.php" errors="0" tests="1" failures="0">
+ <testcase name="/Users/yzen.dev/Projects/opensource/laravel-route-coverage/src/RouterService.php"/>
+</testsuite>
+</testsuites>
+

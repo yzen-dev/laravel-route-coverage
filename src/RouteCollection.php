@@ -7,19 +7,19 @@ namespace LaravelRouteCoverage;
 /**
  *
  */
-class RouteCollection
+final class RouteCollection
 {
     /**
      * The items contained in the collection.
      *
-     * @var array
+     * @var array<mixed>
      */
-    protected $items = [];
+    protected array $items = [];
 
     /**
      * Create a new collection.
      *
-     * @param array $items
+     * @param array<mixed> $items
      *
      * @return void
      */
@@ -62,7 +62,7 @@ class RouteCollection
     }
 
     /**
-     * @return array
+     * @return array<mixed>
      */
     public function get(): array
     {
@@ -75,7 +75,7 @@ class RouteCollection
      */
     public function getTestedRouteStatistic(): self
     {
-        return new static(
+        return new self(
             array_filter(
                 $this->items,
                 function ($item) {
@@ -131,7 +131,6 @@ class RouteCollection
                 if ($item['count']) {
                     $controllers[$item['controller']]['testedActions']++;
                 }
-                continue;
             }
         }
         return new self($controllers);

@@ -58,6 +58,9 @@
     ],
     "phpcs": [
       "./vendor/bin/phpcs --standard=./phpcs.xml -n --no-cache -s"
+    ],
+    "phpcbf": [
+      "./vendor/bin/phpcbf --standard=./phpcs.xml -n --no-cache -s"
     ]
   }
 }

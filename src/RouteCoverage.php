@@ -46,12 +46,12 @@ class RouteCoverage
     }
 
     /**
-     * @param array $testedRoutes
-     * @param array $routes
+     * @param array<mixed> $testedRoutes
+     * @param array<mixed> $routes
      *
-     * @return array
+     * @return array<mixed>
      */
-    private function combineData(iterable $testedRoutes, iterable $routes): array
+    private function combineData(array $testedRoutes, array $routes): array
     {
         $result = [];
         foreach ($routes as $route) {

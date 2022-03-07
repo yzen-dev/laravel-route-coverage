@@ -23,5 +23,8 @@
     <rule ref="PEAR.Commenting.FunctionComment.Missing">
         <exclude-pattern>tests/*</exclude-pattern>
     </rule>
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine">
+        <severity>0</severity>
+    </rule>
     <file>src/</file>
 </ruleset>

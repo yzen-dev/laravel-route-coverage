@@ -3,24 +3,13 @@
 namespace LaravelRouteCoverage\Report\Html;
 
 use LaravelRouteCoverage\RouteCollection;
+use LaravelRouteCoverage\Report\AbstractReport;
 
 /**
  *
  */
-class Reporter
+class Reporter extends AbstractReport
 {
-    /** @var string */
-    private $basePath;
-
-    /**
-     * @param string $basePath
-     */
-    public function __construct(string $basePath)
-    {
-        $this->basePath = $basePath;
-    }
-
-
     /**
      * @param RouteCollection $routeCollection
      *
@@ -28,9 +17,16 @@ class Reporter
      */
     public function generate(RouteCollection $routeCollection)
     {
-        if (!file_exists($this->basePath . '/public/route-coverage')) {
-            mkdir($this->basePath . '/public/route-coverage', 0755);
-        }
+        $this->makeResources();
+        $this->generateAllRoutes($routeCollection);
+        $this->generateGroupByController($routeCollection);
+    }
+
+    /**
+     * @return void
+     */
+    public function makeResources(): void
+    {
         if (!file_exists($this->basePath . '/public/route-coverage/css')) {
             mkdir($this->basePath . '/public/route-coverage/css', 0755);
         }
@@ -40,15 +36,13 @@ class Reporter
 
         copy(__DIR__ . '/template/css/bootstrap.min.css', $this->basePath . '/public/route-coverage/css/bootstrap.min.css');
         copy(__DIR__ . '/template/js/bootstrap.bundle.min.js', $this->basePath . '/public/route-coverage/js/bootstrap.bundle.min.js');
-
-        $this->generateAllRoutes($routeCollection);
-        $this->generateGroupByController($routeCollection);
     }
 
     /**
      * @param RouteCollection $routeCollection
      *
      * @return void
+     * @throws \Exception
      */
     public function generateAllRoutes(RouteCollection $routeCollection)
     {
@@ -62,32 +56,9 @@ class Reporter
   </symbol>
 </svg>';
 
-        $content .= '
-        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">RouteCoverage</a>
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </header>';
+        $content .= $this->getNavbar();
         $content .= '<div class="container-fluid"><div class="row">';
-        $content .= '<nav id="sidebarMenu" class="col-md-2 d-md-block bg-light sidebar collapse">
-      <div class="position-sticky pt-3">
-        <ul class="nav nav-pills flex-column mb-auto">
-          <li class="nav-item">
-        <a href="all-routes.html" class="nav-link active" aria-current="page">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-          All routes
-        </a>
-      </li>
-      <li>
-        <a href="group-by-controller.html" class="link-dark nav-link" aria-current="page">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-          Controllers
-        </a>
-      </li>
-        </ul>
-      </div>
-    </nav>';
+        $content .= $this->getSidebarMenu('all-routes');
         $content .= '<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">';
         $content .= '<h2>Coverage ' . $routeCollection->getCoveragePercent() . '% </h2>';
         $content .= '<h4>All routes ' . $routeCollection->count() . ' </h4>';
@@ -143,16 +114,14 @@ class Reporter
 
         $content .= '</div></main></div></div></body></html>';
 
-        $myFile = $this->basePath . '/public/route-coverage/all-routes.html';
-        $fh = fopen($myFile, 'w');
-        fwrite($fh, $content);
-        fclose($fh);
+        $this->saveFile('all-routes.html', $content);
     }
 
     /**
      * @param RouteCollection $routeCollection
      *
      * @return void
+     * @throws \Exception
      */
     public function generateGroupByController(
         RouteCollection $routeCollection
@@ -167,32 +136,9 @@ class Reporter
   </symbol>
 </svg>';
 
-        $content .= '
-        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">RouteCoverage</a>
-            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </header>';
+        $content .= $this->getNavbar();
         $content .= '<div class="container-fluid"><div class="row">';
-        $content .= '<nav id="sidebarMenu" class="col-md-2 d-md-block bg-light sidebar collapse">
-      <div class="position-sticky pt-3">
-        <ul class="nav nav-pills flex-column mb-auto">
-          <li class="link-dark nav-item">
-        <a href="all-routes.html" class="nav-link" aria-current="page">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-          All routes
-        </a>
-      </li>
-      <li>
-        <a href="group-by-controller.html" class="active nav-link" aria-current="page">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
-          Controllers
-        </a>
-      </li>
-        </ul>
-      </div>
-    </nav>';
+        $content .= $this->getSidebarMenu('controllers');
         $content .= '<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">';
         $content .= '<h2>Coverage ' . $routeCollection->getCoveragePercent() . '% </h2>';
         $content .= '<h4>All routes ' . $routeCollection->count() . ' </h4>';
@@ -234,9 +180,47 @@ class Reporter
 
         $content .= '</main></div></div></body></html>';
 
-        $myFile = $this->basePath . '/public/route-coverage/group-by-controller.html';
-        $fh = fopen($myFile, 'w');
-        fwrite($fh, $content);
-        fclose($fh);
+        $this->saveFile('group-by-controller.html', $content);
+    }
+
+    /**
+     * @param string $route
+     *
+     * @return string
+     */
+    public function getSidebarMenu(string $route): string
+    {
+        return '<nav id="sidebarMenu" class="col-md-2 d-md-block bg-light sidebar collapse">
+      <div class="position-sticky pt-3">
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="link-dark nav-item">
+            <a href="all-routes.html" class="' . ($route === 'all-routes' ? 'active' : '') . ' nav-link" aria-current="page">
+              <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+              All routes
+            </a>
+      </li>
+      <li>
+        <a href="group-by-controller.html" class="' . ($route === 'controllers' ? 'active' : '') . ' nav-link" aria-current="page">
+          <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"></use></svg>
+          Controllers
+        </a>
+      </li>
+        </ul>
+      </div>
+    </nav>';
+    }
+
+    /**
+     * @return string
+     */
+    public function getNavbar(): string
+    {
+        return '
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">RouteCoverage</a>
+            <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </header>';
     }
 }

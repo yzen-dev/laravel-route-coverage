@@ -2,28 +2,19 @@
 
 namespace LaravelRouteCoverage\Report\Junit;
 
+use LaravelRouteCoverage\Report\AbstractReport;
 use LaravelRouteCoverage\RouteCollection;
 
 /**
  *
  */
-class Reporter
+class Reporter extends AbstractReport
 {
-    /** @var string */
-    private $basePath;
-
-    /**
-     * @param string $basePath
-     */
-    public function __construct(string $basePath)
-    {
-        $this->basePath = $basePath;
-    }
-
     /**
      * @param RouteCollection $routeCollection
      *
      * @return void
+     * @throws \Exception
      */
     public function generate(RouteCollection $routeCollection)
     {
@@ -35,8 +26,8 @@ class Reporter
         );
         $content = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $content .= '<testsuites name="LaravelRouteCoverage" errors="0" failures="' . count($noTest) . '" tests="' . count(
-                $routeCollection->get()
-            ) . '">' . PHP_EOL;
+            $routeCollection->get()
+        ) . '">' . PHP_EOL;
 
         foreach ($routeCollection->get() as $route) {
             $content .= '<testsuite name="/builds/tag/assist24/app/Helpers/Helper.php" errors="0" tests="7" failures="7">' . PHP_EOL;
@@ -48,12 +39,7 @@ class Reporter
         }
 
         $content .= '</testsuites>';
-        if (!file_exists($this->basePath . '/public/route-coverage')) {
-            mkdir($this->basePath . '/public/route-coverage', 0755);
-        }
-        $myFile = $this->basePath . '/public/route-coverage/junit.xml';
-        $fh = fopen($myFile, 'w');
-        fwrite($fh, $content);
-        fclose($fh);
+
+        $this->saveFile('junit.xml', $content);
     }
 }

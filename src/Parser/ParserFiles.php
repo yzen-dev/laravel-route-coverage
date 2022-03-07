@@ -35,7 +35,7 @@ class ParserFiles
      *
      * @param string $dir
      *
-     * @return null|array
+     * @return null|array<string>
      */
     public function getAllPaths(string $dir): ?array
     {
@@ -67,7 +67,7 @@ class ParserFiles
     /**
      * Get all test-files
      *
-     * @return null|array
+     * @return null|array<int,array>
      */
     public function parse(): ?array
     {
@@ -112,9 +112,12 @@ class ParserFiles
                         $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
                         $route = preg_replace('/([\'"])/', '', $route);
                         $route = preg_replace('/\?(.*)/', '', $route);
-
-                        $url = ltrim($route, '/');
-                        $url = trim(preg_replace('/\s+/', ' ', $url));
+                        if (is_string($route)) {
+                            $url = ltrim($route, '/');
+                            $url = trim(preg_replace('/\s+/', ' ', $url));
+                        } else {
+                            continue;
+                        }
                         $testedRoutes[] = [
                             'url' => $url,
                             'method' => strtoupper($method),
