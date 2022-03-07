@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace LaravelRouteCoverage;
 
-use LaravelRouteCoverage\Parser\ParserFiles;
-
+/**
+ *
+ */
 class RouteCollection
 {
     /**
@@ -27,21 +28,28 @@ class RouteCollection
         $this->items = $items;
     }
 
-    public function sortRotesByTests()
+    /**
+     * @return self
+     */
+    public function sortRotesByTests(): self
     {
         $routes = $this->items;
         usort(
-            $routes, function ($a, $b) {
-            if ($a['count'] === $b['count']) {
-                return 0;
+            $routes,
+            function ($a, $b) {
+                if ($a['count'] === $b['count']) {
+                    return 0;
+                }
+                return ($a['count'] > $b['count']) ? -1 : 1;
             }
-            return ($a['count'] > $b['count']) ? -1 : 1;
-        }
         );
         return new self($routes);
     }
 
-    public function sortControllerByTests()
+    /**
+     * @return self
+     */
+    public function sortControllerByTests(): self
     {
         $controllers = $this->items;
         usort($controllers, function ($a, $b) {
@@ -62,6 +70,9 @@ class RouteCollection
     }
 
 
+    /**
+     * @return self
+     */
     public function getTestedRouteStatistic(): self
     {
         return new static(
@@ -79,7 +90,7 @@ class RouteCollection
      *
      * @return float
      */
-    public function getCoveragePercent()
+    public function getCoveragePercent(): float
     {
         $countRoute = $this->count();
         $countTestedRoutes = $this->getTestedRouteStatistic()->count();
@@ -92,11 +103,14 @@ class RouteCollection
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return count($this->items);
     }
 
+    /**
+     * @return self
+     */
     public function groupByController(): self
     {
         $controllers = [];

@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace LaravelRouteCoverage;
 
-use Illuminate\Routing\Route;
 use Illuminate\Routing\Router;
 
+/**
+ *
+ */
 class RouterService
 {
     /**
      * The router instance.
      *
-     * @var \Illuminate\Routing\Router
+     * @var Router
      */
     protected $router;
 
     /**
      * Create a new route command instance.
      *
-     * @param \Illuminate\Routing\Router $router
+     * @param Router $router
      *
      * @return void
      */
@@ -30,6 +32,9 @@ class RouterService
         $this->router->flushMiddlewareGroups();
     }
 
+    /**
+     * @return \Illuminate\Support\Collection
+     */
     public function getRoutes()
     {
 

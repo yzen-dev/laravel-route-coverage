@@ -31,5 +31,6 @@ class RouterCoverageTest extends TestCase
     public function testDirNotFound(): void
     {
         $report = $this->routeCoverage->generate();
+        $this->assertEquals(1, 1);
     }
 }

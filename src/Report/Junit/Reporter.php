@@ -2,36 +2,43 @@
 
 namespace LaravelRouteCoverage\Report\Junit;
 
-use LaravelRouteCoverage\RouteCoverage;
+use LaravelRouteCoverage\RouteCollection;
 
+/**
+ *
+ */
 class Reporter
 {
-    /** @var array */
-    private $config;
+    /** @var string */
+    private $basePath;
 
     /**
-     * @param array $config
+     * @param string $basePath
      */
-    public function __construct(array $config)
+    public function __construct(string $basePath)
     {
-        $this->config = $config;
+        $this->basePath = $basePath;
     }
 
-
-    public function generate(RouteCoverage $result)
+    /**
+     * @param RouteCollection $routeCollection
+     *
+     * @return void
+     */
+    public function generate(RouteCollection $routeCollection)
     {
         $noTest = array_filter(
-            $result->getRouteStatistic(),
+            $routeCollection->get(),
             static function ($item) {
                 return $item['count'] === 0;
             }
         );
         $content = '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
         $content .= '<testsuites name="LaravelRouteCoverage" errors="0" failures="' . count($noTest) . '" tests="' . count(
-                $result->getRouteStatistic()
+                $routeCollection->get()
             ) . '">' . PHP_EOL;
 
-        foreach ($result->getRouteStatistic() as $route) {
+        foreach ($routeCollection->get() as $route) {
             $content .= '<testsuite name="/builds/tag/assist24/app/Helpers/Helper.php" errors="0" tests="7" failures="7">' . PHP_EOL;
             $content .=
                 '<testcase name="' . $route['url'] . '" file="' . $route['controller'] . '@' . $route['action'] . '">
@@ -41,10 +48,10 @@ class Reporter
         }
 
         $content .= '</testsuites>';
-        if (!file_exists($this->config['app_path'] . '/../public/route-coverage')) {
-            mkdir($this->config['app_path'] . '/../public/route-coverage', 0755);
+        if (!file_exists($this->basePath . '/public/route-coverage')) {
+            mkdir($this->basePath . '/public/route-coverage', 0755);
         }
-        $myFile = $this->config['app_path'] . '/../public/route-coverage/junit.xml';
+        $myFile = $this->basePath . '/public/route-coverage/junit.xml';
         $fh = fopen($myFile, 'w');
         fwrite($fh, $content);
         fclose($fh);

@@ -2,9 +2,11 @@
 
 namespace LaravelRouteCoverage\Report\Html;
 
-use LaravelRouteCoverage\RouteCoverage;
 use LaravelRouteCoverage\RouteCollection;
 
+/**
+ *
+ */
 class Reporter
 {
     /** @var string */
@@ -19,6 +21,11 @@ class Reporter
     }
 
 
+    /**
+     * @param RouteCollection $routeCollection
+     *
+     * @return void
+     */
     public function generate(RouteCollection $routeCollection)
     {
         if (!file_exists($this->basePath . '/public/route-coverage')) {
@@ -38,6 +45,11 @@ class Reporter
         $this->generateGroupByController($routeCollection);
     }
 
+    /**
+     * @param RouteCollection $routeCollection
+     *
+     * @return void
+     */
     public function generateAllRoutes(RouteCollection $routeCollection)
     {
         $content = '<html><title>Route coverage report</title>';
@@ -137,6 +149,11 @@ class Reporter
         fclose($fh);
     }
 
+    /**
+     * @param RouteCollection $routeCollection
+     *
+     * @return void
+     */
     public
     function generateGroupByController(
         RouteCollection $routeCollection

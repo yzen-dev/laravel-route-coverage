@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use LaravelRouteCoverage\RouteCoverage;
 use LaravelRouteCoverage\RouterService;
 use LaravelRouteCoverage\RouteCollection;
+use Illuminate\Config\Repository as Config;
+use Illuminate\Contracts\Foundation\Application;
 use LaravelRouteCoverage\Report\Html\Reporter as HtmlReporter;
 use LaravelRouteCoverage\Report\Junit\Reporter as JUnitReporter;
 
@@ -22,14 +24,18 @@ class GenerateReportCommand extends Command
     /** @var string The console command description. */
     protected $description = 'Generate endpoints coverage report ';
 
+    private Application $app;
     private RouterService $routerService;
     private RouteCoverage $routeCoverage;
+    private Config $config;
     private RouteCollection $routeCollection;
 
-    public function __construct(RouterService $router, RouteCoverage $routerService)
+    public function __construct(RouterService $router, RouteCoverage $routerService, Application $app, Config $config)
     {
         parent::__construct();
+        $this->app = $app;
         $this->routerService = $router;
+        $this->config = $config;
         $this->routeCoverage = $routerService;
     }
 
@@ -37,7 +43,8 @@ class GenerateReportCommand extends Command
     public function handle()
     {
         if (empty($routes = $this->routerService->getRoutes())) {
-            return $this->error("Your application doesn't have any routes matching the given criteria.");
+            $this->error("Your application doesn't have any routes matching the given criteria.");
+            return 0;
         }
         $this->routeCollection = $this->routeCoverage->generate();
 
@@ -51,16 +58,13 @@ class GenerateReportCommand extends Command
             $this->printEndpoints();
         }
         if ($this->option('html')) {
-            (new HtmlReporter(['app_path' => app_path()]))->generate($this->routeCollection);
-        }
-        if ($this->option('json')) {
-            (new JSONReporter(['app_path' => app_path()]))->generate($this->routeCollection);
+            (new HtmlReporter($this->app->basePath()))->generate($this->routeCollection);
         }
         if ($this->option('junit')) {
-            (new JUnitReporter(['app_path' => app_path()]))->generate($this->routeCollection);
+            (new JUnitReporter($this->app->basePath()))->generate($this->routeCollection);
         }
 
-        if ($this->routeCollection->getCoveragePercent() < app()['config']['route-coverage']['percent_approval']) {
+        if ($this->routeCollection->getCoveragePercent() < $this->config->get('route-coverage.percent_approval')) {
             exit(1);
         }
         exit(0);
@@ -77,7 +81,7 @@ class GenerateReportCommand extends Command
                 'count' => $route['count'],
             ];
         };
-        $data = array_map($prepareRowTable, $this->parser->getRouteStatistic());
+        $data = array_map($prepareRowTable, $this->routeCollection->get());
 
         $header = ['Route', 'Methods', 'Controller', 'Action', 'Count'];
         $this->table(

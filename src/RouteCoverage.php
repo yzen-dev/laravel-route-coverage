@@ -7,17 +7,26 @@ namespace LaravelRouteCoverage;
 use Illuminate\Config\Repository as Config;
 use LaravelRouteCoverage\Parser\ParserFiles;
 
+/**
+ *
+ */
 class RouteCoverage
 {
-    private $statistic = [];
+    /**
+     * @var ParserFiles
+     */
     private ParserFiles $parser;
-    private RouteCollection $collection;
+    
+    /**
+     * @var RouterService
+     */
     private RouterService $router;
 
     /**
      * RouteCoverage constructor.
      *
-     * @param array $statistic
+     * @param RouterService $routerService
+     * @param Config $config
      */
     public function __construct(RouterService $routerService, Config $config)
     {
@@ -25,6 +34,9 @@ class RouteCoverage
         $this->router = $routerService;
     }
 
+    /**
+     * @return RouteCollection
+     */
     public function generate(): RouteCollection
     {
         $testedRoutes = $this->parser->parse();
@@ -32,7 +44,13 @@ class RouteCoverage
         return new RouteCollection($routes);
     }
 
-    private function combineData($testedRoutes, $routes)
+    /**
+     * @param $testedRoutes
+     * @param $routes
+     *
+     * @return array
+     */
+    private function combineData($testedRoutes, $routes): array
     {
         $result = [];
         foreach ($routes as $route) {

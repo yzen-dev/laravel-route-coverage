@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace LaravelRouteCoverage\Parser;
 
-use Illuminate\Contracts\Foundation\Application;
-
+/**
+ *
+ */
 class ParserFiles
 {
+    /** @const array */
     private const REGEX = [
         '/->(json|call)\(([\s\S]*?)\)/m',
         '/->(get|getJson|post|postJson|put|putJson|patch|patchJson|delete|deleteJson|options|optionsJson)\(([\s\S]*?)\)/m',
     ];
 
+    /**
+     * @var string
+     */
     private string $testPath;
 
     /**
@@ -25,7 +30,12 @@ class ParserFiles
         $this->testPath = $testPath;
     }
 
-    public function getAllPaths($dir): ?array
+    /**
+     * @param string $dir
+     *
+     * @return array|null
+     */
+    public function getAllPaths(string $dir): ?array
     {
         if (!is_dir($dir)) {
             return null;
@@ -37,16 +47,21 @@ class ParserFiles
         $scannedItem = array_diff($items, ['..', '.']);
         foreach ($scannedItem as $item) {
             $path = $dir . DIRECTORY_SEPARATOR . $item;
-            if (is_dir($path)) {
-                $files = array_merge($files, $this->getAllPaths($path));
-                continue;
+            if (!is_dir($path)) {
+                $files[] = $path;
             }
-            $files[] = $path;
+            $scanFiles = $this->getAllPaths($path);
+            if ($scanFiles !== null) {
+                $files = array_merge($files, $scanFiles);
+            }
         }
         return $files;
     }
 
-    public function parse()
+    /**
+     * @return array|null
+     */
+    public function parse(): ?array
     {
         $files = $this->getAllPaths($this->testPath);
         if ($files === null) {
@@ -57,6 +72,9 @@ class ParserFiles
 
         foreach ($files as $file) {
             $content = file_get_contents($file);
+            if (!$content) {
+                continue;
+            }
 
             foreach (self::REGEX as $regex) {
                 preg_match_all($regex, $content, $matches, PREG_SET_ORDER);
