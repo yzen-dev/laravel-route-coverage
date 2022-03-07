@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelRouteCoverage;
 
 use Illuminate\Config\Repository as Config;
+use Illuminate\Support\Collection;
 use LaravelRouteCoverage\Parser\ParserFiles;
 
 /**
@@ -45,12 +46,12 @@ class RouteCoverage
     }
 
     /**
-     * @param $testedRoutes
-     * @param $routes
+     * @param array $testedRoutes
+     * @param array $routes
      *
      * @return array
      */
-    private function combineData($testedRoutes, $routes): array
+    private function combineData(iterable $testedRoutes, iterable $routes): array
     {
         $result = [];
         foreach ($routes as $route) {

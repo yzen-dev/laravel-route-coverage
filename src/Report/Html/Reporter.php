@@ -154,8 +154,7 @@ class Reporter
      *
      * @return void
      */
-    public
-    function generateGroupByController(
+    public function generateGroupByController(
         RouteCollection $routeCollection
     ) {
         $content = '<html><title>Route coverage report</title>';

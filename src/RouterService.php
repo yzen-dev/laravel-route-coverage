@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace LaravelRouteCoverage;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Collection;
 
 /**
  *
@@ -33,9 +34,9 @@ class RouterService
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public function getRoutes()
+    public function getRoutes(): Collection
     {
 
         return collect($this->router->getRoutes())

@@ -31,9 +31,11 @@ class ParserFiles
     }
 
     /**
+     * Get all files in directory
+     *
      * @param string $dir
      *
-     * @return array|null
+     * @return null|array
      */
     public function getAllPaths(string $dir): ?array
     {
@@ -42,6 +44,10 @@ class ParserFiles
         }
 
         $items = scandir($dir);
+
+        if (!$items) {
+            return null;
+        }
 
         $files = [];
         $scannedItem = array_diff($items, ['..', '.']);
@@ -59,7 +65,9 @@ class ParserFiles
     }
 
     /**
-     * @return array|null
+     * Get all test-files
+     *
+     * @return null|array
      */
     public function parse(): ?array
     {

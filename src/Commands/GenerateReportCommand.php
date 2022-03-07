@@ -24,12 +24,37 @@ class GenerateReportCommand extends Command
     /** @var string The console command description. */
     protected $description = 'Generate endpoints coverage report ';
 
+    /**
+     * @var Application
+     */
     private Application $app;
+    
+    /**
+     * @var RouterService
+     */
     private RouterService $routerService;
+    
+    /**
+     * @var RouteCoverage
+     */
     private RouteCoverage $routeCoverage;
+    
+    /**
+     * @var Config
+     */
     private Config $config;
+    
+    /**
+     * @var RouteCollection
+     */
     private RouteCollection $routeCollection;
 
+    /**
+     * @param RouterService $router
+     * @param RouteCoverage $routerService
+     * @param Application $app
+     * @param Config $config
+     */
     public function __construct(RouterService $router, RouteCoverage $routerService, Application $app, Config $config)
     {
         parent::__construct();
@@ -70,7 +95,10 @@ class GenerateReportCommand extends Command
         exit(0);
     }
 
-    private function printEndpoints()
+    /**
+     * @return void
+     */
+    private function printEndpoints(): void
     {
         $prepareRowTable = static function ($route) {
             return [
@@ -91,7 +119,10 @@ class GenerateReportCommand extends Command
         );
     }
 
-    private function printControllers()
+    /**
+     * @return void
+     */
+    private function printControllers(): void
     {
         $prepareRowTable = static function ($route) {
             return [
