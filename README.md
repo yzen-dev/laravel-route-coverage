@@ -5,14 +5,14 @@
 
 Laravel route coverage report.
 
-With this package you can see the percentage of test coverage of your endpoint's. Unless of course you do it through Laravel or PHPUnit tests.
-How it works?
-First, we scan the entire directory where the tests are stored, and look for all the http calls there. After that, we take all the routes of the project and combine it into a single report. 
+With this package you can see the percentage of test coverage of your routes. Unless of course you do it through Laravel or PHPUnit tests.
+### How it works?
+The package will scan all your tests collecting all the http queries that are called in them. After that, it will compare the results with the routes of your application. Routes are taken only by the `App` prefix to exclude vendor routes.
 
 ## :scroll: **Installation**
 The package can be installed via composer:
 ```
-composer require yzen.dev/laravel-route-coverage
+composer require yzen.dev/laravel-route-coverage --dev
 ```
 
 ## :scroll: **Usage**
@@ -23,10 +23,23 @@ php artisan route:coverage
 ```
 After executing the command, the result of the report will be displayed in the console in the following form:
 
-![image](https://user-images.githubusercontent.com/24630195/122606099-1369ee00-d081-11eb-9577-a4a1a4a503bb.png)
+<img width="1148" alt="console-all-routes" src="https://user-images.githubusercontent.com/24630195/157137803-d73fe73e-a0fc-49a1-8eb3-aeb3daf43b30.png">
+
+### Possible options:
+
+```bash
+php artisan route:coverage --group-by-controller
+```
+
+In this case, all the results will be grouped by controllers, displaying how many actions there are in the controller, and how many of them are covered by tests.
+
+<img width="448" alt="console-group-by-controller" src="https://user-images.githubusercontent.com/24630195/157138734-03639864-ea6c-45eb-8819-6dc732da9e3c.png">
 
 
-Also the html report will be saved in the public/route-coverage directory:
+```bash
+php artisan route:coverage --html
+```
+Due to the `--html` option, you will also receive a generated report in the html page. The report will be located in the public directory `public/route-coverage`
 
-![image](https://user-images.githubusercontent.com/24630195/122606142-2250a080-d081-11eb-9950-0ed795d9c7b8.png)
+<img width="1721" alt="html-report" src="https://user-images.githubusercontent.com/24630195/157138963-a6a0d24c-2020-4546-845a-130897cc9545.png">
 
