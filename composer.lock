@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e755adea8e3ea0dcea587f20d2034f43",
+    "content-hash": "eb87135c27034a818401973ea746a6e4",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -99,7 +99,7 @@
         },
         {
             "name": "illuminate/collections",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/collections.git",
@@ -153,7 +153,7 @@
         },
         {
             "name": "illuminate/config",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/config.git",
@@ -201,7 +201,7 @@
         },
         {
             "name": "illuminate/console",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/console.git",
@@ -261,7 +261,7 @@
         },
         {
             "name": "illuminate/container",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
@@ -312,7 +312,7 @@
         },
         {
             "name": "illuminate/contracts",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
@@ -360,7 +360,7 @@
         },
         {
             "name": "illuminate/filesystem",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
@@ -422,16 +422,16 @@
         },
         {
             "name": "illuminate/http",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/http.git",
-                "reference": "3966c05c38096e15cb86e44201fc5f5731d1f3ad"
+                "reference": "0fe5a877ea7c926cc6ed5a8f4dd5c052a4d8bef9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/http/zipball/3966c05c38096e15cb86e44201fc5f5731d1f3ad",
-                "reference": "3966c05c38096e15cb86e44201fc5f5731d1f3ad",
+                "url": "https://api.github.com/repos/illuminate/http/zipball/0fe5a877ea7c926cc6ed5a8f4dd5c052a4d8bef9",
+                "reference": "0fe5a877ea7c926cc6ed5a8f4dd5c052a4d8bef9",
                 "shasum": ""
             },
             "require": {
@@ -476,11 +476,11 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2022-02-12T19:11:00+00:00"
+            "time": "2022-03-03T15:12:11+00:00"
         },
         {
             "name": "illuminate/macroable",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/macroable.git",
@@ -526,7 +526,7 @@
         },
         {
             "name": "illuminate/pipeline",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/pipeline.git",
@@ -574,7 +574,7 @@
         },
         {
             "name": "illuminate/routing",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/routing.git",
@@ -637,7 +637,7 @@
         },
         {
             "name": "illuminate/session",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/session.git",
@@ -693,7 +693,7 @@
         },
         {
             "name": "illuminate/support",
-            "version": "v8.83.3",
+            "version": "v8.83.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
@@ -4125,16 +4125,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.5.17",
+            "version": "9.5.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f"
+                "reference": "1b5856028273bfd855e60a887278857d872ec67a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f",
-                "reference": "5c5abcfaa2cbd44b2203995d7a339ef910fe0c8f",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1b5856028273bfd855e60a887278857d872ec67a",
+                "reference": "1b5856028273bfd855e60a887278857d872ec67a",
                 "shasum": ""
             },
             "require": {
@@ -4212,7 +4212,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.17"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/9.5.18"
             },
             "funding": [
                 {
@@ -4224,7 +4224,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-03-05T16:54:31+00:00"
+            "time": "2022-03-08T06:52:28+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -5361,7 +5361,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.4 || ^8.0"
+        "php": "^7.4 | ^8.0"
     },
     "platform-dev": [],
     "plugin-api-version": "2.2.0"
