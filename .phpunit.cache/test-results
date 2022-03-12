@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Tests\\ReportJunitTest::testGetProjectRoutes":3},"times":{"Tests\\ParserDirectoryTest::testParserTestDir":0.001,"Tests\\RouterCoverageTest::testDirNotFound":0.005,"Tests\\RouterServiceTest::testGetProjectRoutes":0.002,"Tests\\ReportHtmlTest::testGetProjectRoutes":0.008,"Tests\\ReportJunitTest::testGetProjectRoutes":0.012}}

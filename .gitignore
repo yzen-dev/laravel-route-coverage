@@ -1,3 +1,6 @@
 .idea/
 vendor/
+public/
 .phpunit.result.cache
+
+.phpunit.cache/code-coverage/
