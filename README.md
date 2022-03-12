@@ -1,5 +1,8 @@
 # LaravelRouteCoverage
-![Packagist Version](https://img.shields.io/packagist/v/yzen.dev/laravel-route-coverage?color=%23007ec6&style=plastic)
+![Packagist Version](https://img.shields.io/packagist/v/yzen.dev/laravel-route-coverage?color=blue&label=version)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/yzen-dev/laravel-route-coverage/Run%20tests?label=tests&logo=github)
+[![Coverage](https://codecov.io/gh/yzen-dev/laravel-route-coverage/branch/master/graph/badge.svg?token=QAO8STLPMI)](https://codecov.io/gh/yzen-dev/laravel-route-coverage)
+![License](https://img.shields.io/github/license/yzen-dev/laravel-route-coverage)
 ![Packagist Downloads](https://img.shields.io/packagist/dm/yzen.dev/laravel-route-coverage)
 ![Packagist Downloads](https://img.shields.io/packagist/dt/yzen.dev/laravel-route-coverage)
 
