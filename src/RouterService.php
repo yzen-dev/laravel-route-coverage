@@ -29,7 +29,7 @@ class RouterService
     public function __construct(Router $router)
     {
         $this->router = $router;
-}
+    }
 
     /**
      * @return array<mixed>
