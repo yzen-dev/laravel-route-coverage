@@ -107,8 +107,8 @@ class ParserFiles
                             $method = preg_replace('/json/i', '', $action[1]);
                             $route = $action[2];
                         }
-
-                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])/', '{$val}', $route);
+                        
+                        $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*?)[\n\s]*\.[\n\s]*[\'"])|{(.*)}/', '{$val}', $route);
                         $route = preg_replace('/([\'"][\n\s]*\.[\n\s]*\$(.*))[\'"]*/', '{$val}', $route);
                         $route = preg_replace('/([\'"])/', '', $route);
                         $route = preg_replace('/\?(.*)/', '', $route);
