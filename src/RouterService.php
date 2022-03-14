@@ -29,9 +29,7 @@ class RouterService
     public function __construct(Router $router)
     {
         $this->router = $router;
-
-        $this->router->flushMiddlewareGroups();
-    }
+}
 
     /**
      * @return array<mixed>

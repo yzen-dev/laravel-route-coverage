@@ -1,6 +1,6 @@
 {
   "name": "yzen.dev/laravel-route-coverage",
-  "version": "0.1",
+  "version": "0.1.1",
   "description": "Laravel route coverage",
   "minimum-stability": "dev",
   "prefer-stable": true,
